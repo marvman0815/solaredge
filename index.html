@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="refresh" content="540">
-    <title>SolarEdge Dashboard Continuous</title>
+    <title>Testseite Echo Show Keep-Alive</title>
     <style>
         * {
             margin: 0;
@@ -19,7 +19,7 @@
             font-family: sans-serif;
             color: #ffffff;
         }
-        .content-frame {
+        iframe {
             width: 100vw;
             height: 100vh;
             border: none;
@@ -43,16 +43,6 @@
             padding: 20px;
             text-align: center;
         }
-        .open-btn {
-            margin-top: 15px;
-            padding: 12px 24px;
-            background-color: #f05a28;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: bold;
-            z-index: 3;
-        }
         #audio-trigger {
             position: absolute;
             top: 0;
@@ -68,15 +58,11 @@
 <body>
 
     <div class="loading-screen">
-        <p>Lade SolarEdge Dashboard...</p>
-        <p style="font-size: 0.8rem; color: #aaa; margin-top: 10px;">Falls die Seite weiß bleibt, wird das Einbetten von SolarEdge blockiert:</p>
-        <a class="open-btn" href="https://monitoring.solaredge.com/mfe/auth/" target="_self">SolarEdge direkt öffnen</a>
+        <p>Lade Wikipedia Testseite...</p>
     </div>
 
-    <!-- Einbettung per Object als Alternative zu iFrame -->
-    <object data="https://monitoring.solaredge.com/mfe/auth/" class="content-frame" id="dashboard-frame">
-        <embed src="https://monitoring.solaredge.com/mfe/auth/" class="content-frame">
-    </object>
+    <!-- Test-Einbettung via iFrame (Wikipedia erlaubt das Frame-Embedding) -->
+    <iframe id="dashboard-frame" src="https://de.m.wikipedia.org"></iframe>
 
     <!-- Silent Audio für Standby-Schutz -->
     <audio id="silent-audio" loop preload="auto">
