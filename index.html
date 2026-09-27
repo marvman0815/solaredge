@@ -17,12 +17,17 @@
             overflow: hidden;
             background-color: #000;
             font-family: sans-serif;
+            color: #ffffff;
         }
-        iframe {
+        .content-frame {
             width: 100vw;
             height: 100vh;
             border: none;
             display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 2;
         }
         .loading-screen {
             position: absolute;
@@ -31,11 +36,22 @@
             width: 100%;
             height: 100%;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            color: #ffffff;
-            font-size: 1.5rem;
             z-index: 1;
+            padding: 20px;
+            text-align: center;
+        }
+        .open-btn {
+            margin-top: 15px;
+            padding: 12px 24px;
+            background-color: #f05a28;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            z-index: 3;
         }
         #audio-trigger {
             position: absolute;
@@ -44,7 +60,7 @@
             width: 100vw;
             height: 100vh;
             z-index: 9999;
-            background: rgba(0, 0, 0, 0);
+            background: rgba(0, 0, 0, 0.01);
             cursor: pointer;
         }
     </style>
@@ -52,11 +68,17 @@
 <body>
 
     <div class="loading-screen">
-        Lade SolarEdge Dashboard...
+        <p>Lade SolarEdge Dashboard...</p>
+        <p style="font-size: 0.8rem; color: #aaa; margin-top: 10px;">Falls die Seite weiß bleibt, wird das Einbetten von SolarEdge blockiert:</p>
+        <a class="open-btn" href="https://monitoring.solaredge.com/mfe/auth/" target="_self">SolarEdge direkt öffnen</a>
     </div>
 
-    <iframe id="dashboard-frame" src="https://monitoring.solaredge.com/mfe/auth/" style="position: relative; z-index: 2;"></iframe>
+    <!-- Einbettung per Object als Alternative zu iFrame -->
+    <object data="https://monitoring.solaredge.com/mfe/auth/" class="content-frame" id="dashboard-frame">
+        <embed src="https://monitoring.solaredge.com/mfe/auth/" class="content-frame">
+    </object>
 
+    <!-- Silent Audio für Standby-Schutz -->
     <audio id="silent-audio" loop preload="auto">
         <source src="data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjI5LjEwMAAAAAAAAAAAAAAA//OEAAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAAEAAABCAADCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCws=" type="audio/mpeg">
     </audio>
@@ -66,7 +88,6 @@
     <script>
         const audio = document.getElementById('silent-audio');
         const trigger = document.getElementById('audio-trigger');
-        const iframe = document.getElementById('dashboard-frame');
 
         function startAudio() {
             audio.play().then(() => {
@@ -75,21 +96,13 @@
                     trigger.style.display = 'none';
                 }
             }).catch(error => {
-                console.warn('Autoplay blockiert. Warten auf Interaktion...', error);
+                console.warn('Autoplay blockiert. Warten auf Tippen...', error);
             });
         }
 
         window.addEventListener('load', startAudio);
 
-        trigger.addEventListener('click', () => {
-            startAudio();
-        });
-
-        const REFRESH_INTERVAL = 30 * 60 * 1000;
-        setInterval(() => {
-            console.log('Lade Dashboard iFrame neu...');
-            iframe.src = iframe.src;
-        }, REFRESH_INTERVAL);
+        trigger.addEventListener('click', startAudio);
     </script>
 </body>
 </html>
